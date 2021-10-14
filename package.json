@@ -1,26 +1,46 @@
 {
-  "name": "vent-display",
-  "version": "1.0.0",
-  "description": "[![DOI](https://zenodo.org/badge/273199904.svg)](https://zenodo.org/badge/latestdoi/273199904)",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PubInv/vent-display.git"
-  },
-  "author": "",
-  "license": "GPLv3",
-  "bugs": {
-    "url": "https://github.com/PubInv/vent-display/issues"
-  },
-  "homepage": "https://github.com/PubInv/vent-display#readme",
+  "name": "ventos",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "serialport": "^9.0.7",
-    "yargs": "^16.2.0"
+    "@craco/craco": "^6.3.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "plotly.js": "^1.58.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-plotly.js": "^2.5.1",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.8",
+    "postcss": "^7.0.39",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.16"
   }
 }
