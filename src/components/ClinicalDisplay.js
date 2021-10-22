@@ -6,7 +6,7 @@ import { react } from "plotly.js";
 
 function ClinicalDisplay() {
   const greeting = "Hello Function Component!";
-  const data = [{"id":"1", "name": "TV", "value": "25" }, {"id":"2", "name": "RR", "value": "10" }, { "id":"3","name": "IE", "value": "1:2" },{ "id":"4","name": "Pimax", "value": "40" },{"id":"5", "name": "Peep", "value": "off" },{ "id":"6", "name": "more ", "value": "items" }]
+  const data = [{"id":"Pinsp", "name": "cmH2O", "value": "25" }, {"id":"2", "name": "RR", "value": "10" }, { "id":"3","name": "IE", "value": "1:2" },{ "id":"4","name": "Pimax", "value": "40" },{"id":"5", "name": "Peep", "value": "off" }]
   
   
   return (
@@ -39,7 +39,7 @@ function ClinicalDisplay() {
             </div>
 
             <div className="flex flex-col w-1/2 mx-2">
-              <p>hello</p>
+            
               <div className="flex justify-between">
                 <div>tvimp</div>
                 <div>80</div>
@@ -74,66 +74,19 @@ function ClinicalDisplay() {
             </div>
           </div>
         </div>
+        
         <div className="mt-4">
           <VolumeGraph />
         </div>
 
         <div className="flex flex-col w-96 mr-10 mt-4">
           <div>
-            <div className="flex border-2 border-b-0 border-solid border-cyan-100-accent h-36 w-40rem">
-              <div>
-                <p>Ppeak</p>
-                <p>40</p>
-              </div>
-              <div>
-               
-                <p>CMI</p>
-                <p>Pmaan</p>
-                <p>PEEP</p>
-              </div>
-            </div>
-          </div>
-
+             
           <div>
-            <div className="flex border-2 border-b-0 border-solid border-cyan-100-accent h-36">
-              <div>
-                <p>Ppeak</p>
-                <p>40</p>
-              </div>
-              <div>
-                <p>CMI</p>
-                <p>Pmaan</p>
-                <p>PEEP</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex border-2 border-b-0 border-solid border-cyan-100-accent h-36">
-              <div>
-               
-                <p>Ppeak</p>
-                <p>40</p>
-              </div>
-              <div>
-                <p>CMI</p>
-                <p>Pmaan</p>
-                <p>PEEP</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex border-2 border-solid border-cyan-100-accent h-36">
-              <div>
-                <p>Ppeak</p>
-                <p>40</p>
-              </div>
-              <div>
-                <p>CMI</p>
-                <p>Pmaan</p>
-                <p>PEEP</p>
-              </div>
+            
+                {data.map((d, i) => {
+                  return (<VentInput data={d} />)
+              })} 
             </div>
           </div>
         </div>
@@ -147,8 +100,8 @@ function ClinicalDisplay() {
      </div>
         
 
-        
-      </div>
+      </div>  
+      
     
       </React.Fragment>
   );
