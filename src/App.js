@@ -77,7 +77,7 @@ function App() {
           <input type="checkbox" id="livetoggle" checked />
           <span class="slider round"></span>
         </label>
-
+        {/* clinical display button should be a component*/}
         <label for="displaytoggle">Clinical Display:</label>
         <label class="switch">
           <input type="checkbox" id="displaytoggle" />
