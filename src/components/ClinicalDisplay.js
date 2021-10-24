@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "react-modal";
 import VolumeGraph from "./VolumeGraph";
 import PressureGraph from "./PressureGraph";
+import PPEAK from "./PPEAK";
 
 function ClinicalDisplay() {
-  const greeting = "Hello Function Component!";
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
-    <div className="flex flex-col bg-black text-green-600 w-screen ">
+    <div className="flex flex-col w-screen text-green-600 bg-black ">
       <div className="flex justify-between">
-        <div className="border-2 border-solid border-cyan-100-accent w-96 mt-4 ml-10">
+        <div className="mt-4 ml-10 border-2 border-solid border-cyan-100-accent w-96">
           <div>
             <PressureGraph />
           </div>
@@ -72,7 +73,7 @@ function ClinicalDisplay() {
           <VolumeGraph />
         </div>
 
-        <div className="flex flex-col w-96 mr-10 mt-4">
+        <div className="flex flex-col mt-4 mr-10 w-96">
           <div>
             <div className="flex border-2 border-b-0 border-solid border-cyan-100-accent h-36 w-40rem">
               <div>
@@ -130,38 +131,7 @@ function ClinicalDisplay() {
           </div>
         </div>
       </div>
-
-      <div className="flex justify-center">
-        <div className="bg-cyan-200-accent border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>TV</p>
-          <p>500</p>
-        </div>
-
-        <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>RR</p>
-          <p>10</p>
-        </div>
-
-        <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>IE</p>
-          <p>1:2</p>
-        </div>
-
-        <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>Pimax</p>
-          <p>40</p>
-        </div>
-
-        <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>PEEP</p>
-          <p>OFF</p>
-        </div>
-
-        <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-          <p>MORE</p>
-          <p>SETTINGS</p>
-        </div>
-      </div>
+      <PPEAK />
     </div>
   );
 }
