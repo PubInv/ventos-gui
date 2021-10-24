@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import axios from "axios";
+import VentInput from "./VentControl";
 import values from "postcss-modules-values";
 
 export default function PPEAK() {
+  const data = [
+    { id: "1", name: "TV", value: "25" },
+    { id: "2", name: "RR", value: "10" },
+    { id: "3", name: "IE", value: "1:2" },
+    { id: "4", name: "Pimax", value: "40" },
+    { id: "5", name: "Peep", value: "off" },
+  ];
+
   // modal
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -11,7 +20,7 @@ export default function PPEAK() {
     setModalOpen(true);
   };
   const onCloseModal = (e) => {
-    e.stopPropagation();
+    //e.stopPropagation();// to prevent default rendering;
     setModalOpen(false);
   };
 
@@ -31,7 +40,6 @@ export default function PPEAK() {
 
     await axios.get("https://ventos.dev/ventos/300").then((response) => {
       console.log(response.data);
-      console.log("hello5");
     });
     return false;
   };
@@ -53,30 +61,13 @@ export default function PPEAK() {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-cyan-200-accent border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-        <p>TV</p>
-        <p>500</p>
+    <React.Fragment>
+      <div className="flex justify-center">
+        {data.map((d, i) => {
+          return <VentInput data={d} />;
+        })}
       </div>
-
-      <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-        <p>RR</p>
-        <p>10</p>
-      </div>
-
-      <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-        <p>IE</p>
-        <p>1:2</p>
-      </div>
-
-      <button
-        className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black"
-        onClick={onOpenModal}
-      >
-        {" "}
-        Pimax<br></br>40
-      </button>
-      <Modal isOpen={modalOpen}>
+      {/* <Modal isOpen={modalOpen}>
         <span className="flex-grow">
           <form id="pimaxForm" onSubmit={UpdatePimaxOnSubmit(updatingPimax)}>
             <input
@@ -113,12 +104,7 @@ export default function PPEAK() {
       >
         <p>PEEP</p>
         <p>OFF</p>
-      </button>
-
-      <div className="bg-cyan-300 border-2 border-solid border-red-300-contrast w-100% p-10 m-5 rounded-lg text-black">
-        <p>MORE</p>
-        <p>SETTINGS</p>
-      </div>
-    </div>
+      </button>*/}
+    </React.Fragment>
   );
 }
