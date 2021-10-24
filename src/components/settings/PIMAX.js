@@ -24,12 +24,12 @@ export default function PIMAX() {
   const UpdateOnSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://ventos.dev/ventos/300", {
+      .post("https://ventos.dev/ventos/control", {
         com: "C",
         par: "P",
         int: "T",
         mod: 0,
-        val: newFormValues,
+        val: 35,
       })
       .then(function (response) {
         console.log(response);
