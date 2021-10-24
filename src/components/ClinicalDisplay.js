@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import VolumeGraph from "./VolumeGraph";
 import PressureGraph from "./PressureGraph";
-import PPEAK from "./PPEAK";
+import PIMAX from "./settings/PIMAX";
+import TV from "./settings/TV";
+import RR from "./settings/RR";
+import IE from "./settings/IE";
 
 function ClinicalDisplay() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -131,7 +134,12 @@ function ClinicalDisplay() {
           </div>
         </div>
       </div>
-      <PPEAK />
+      <div className="flex justify-center">
+        <PIMAX />
+        <TV />
+        <RR />
+        <IE />
+      </div>
     </div>
   );
 }
