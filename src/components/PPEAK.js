@@ -29,7 +29,16 @@ export default function PPEAK() {
   const UpdatePimaxOnSubmit = async function () {
     console.log("hello4");
 
-    await axios.get("https://ventos.dev/ventos/300").then((response) => {
+
+// Changed to a post
+// Constrcut PIRCS json here
+    const DSERVER_URL = "https://ventos.dev/ventos";
+    var url =  DSERVER_URL + "/control/";
+    var new_pressure = newPimaxFormValues * 10;
+    console.log("new_pressure",new_pressure);
+
+    var data = { com: "C", par: "P", int: "T", mod: 0, val:  new_pressure };
+    await axios.post(url).then((response) => {
       console.log(response.data);
       console.log("hello5");
     });
