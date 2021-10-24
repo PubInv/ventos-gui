@@ -29,7 +29,7 @@ export default function PIMAX() {
         par: "P",
         int: "T",
         mod: 0,
-        val: newFormValues,
+        val: 35,
       })
       .then(function (response) {
         console.log(response);
