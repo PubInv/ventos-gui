@@ -1,14 +1,12 @@
-import logo from "./logo.svg";
-import Graph from "./components/ClinicalDisplay";
 import "./App.css";
 import ClinicalDisplay from "./components/ClinicalDisplay";
 
 function App() {
   return (
     <div className="App">
-      <div class="jumbotron">
-        <h1 class="display-4">VentMon Respiration Analysis</h1>
-        <p class="lead">
+      <div className="jumbotron">
+        <h1 className="display-4">VentMon Respiration Analysis</h1>
+        <p className="lead">
           This is a work in progress of{" "}
           <a href="https://www.pubinv.org">Public Invention</a>. It can be
           attached to a data server to produce an interactive or static analysis
@@ -83,33 +81,6 @@ function App() {
           <input type="checkbox" id="displaytoggle" />
           <span class="slider round"></span>
         </label>
-
-        {/* <div id="leftjustify">
-          <button type="button" class="btn btn-primary">
-            5s
-          </button>
-          <button type="button" class="btn btn-primary">
-            10s
-          </button>
-          <button type="button" class="btn btn-primary">
-            15s
-          </button>
-          <button type="button" class="btn btn-primary">
-            30s
-          </button>
-          <button type="button" class="btn btn-primary">
-            60s
-          </button>
-          <button type="button" class="btn btn-primary">
-            120s
-          </button>
-          <button type="button" class="btn btn-primary">
-            180s
-          </button>
-          <button type="button" class="btn btn-primary">
-            300s
-          </button>
-        </div> */}
       </div>
       <ClinicalDisplay />
     </div>

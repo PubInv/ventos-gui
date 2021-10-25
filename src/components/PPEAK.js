@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
+
 import axios from "axios";
 import VentInput from "./VentControl";
-import values from "postcss-modules-values";
 
 export default function PPEAK() {
   const data = [
@@ -35,11 +34,7 @@ export default function PPEAK() {
 
   return (
     <React.Fragment>
-      <div className="flex justify-center">
-        {data.map((d, i) => {
-          return <VentInput data={d} />;
-        })}
-      </div>
+      <div className="flex justify-center"></div>
     </React.Fragment>
   );
 }

@@ -6,7 +6,6 @@ class VentInput extends React.Component {
     super(props);
   }
   data = this.props.data;
-  openModal() {}
 
   render() {
     return (
@@ -20,6 +19,7 @@ class VentInput extends React.Component {
               <Modal
                 openModal={this.Modal.openModal}
                 handleClose={this.Modal.closeModal}
+                {...this.props.data.value}
               >
                 <p>Modal</p>
               </Modal>

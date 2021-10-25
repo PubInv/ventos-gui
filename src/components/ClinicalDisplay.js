@@ -8,7 +8,7 @@ import RR from "./settings/RR";
 import IE from "./settings/IE";
 
 function ClinicalDisplay() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="flex flex-col w-screen text-green-600 bg-black ">
       <div className="flex justify-between">
