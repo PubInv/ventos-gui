@@ -69,50 +69,5 @@ function PressureGraph() {
   );
 }
 
-function processNewSamples(samples) {
-}
-
-function getPIRDSData() {
-  const DSERVER_URL = "https://ventos.dev/ventos";
-  const url = "/"+ MAX_SAMPLES_TO_STORE_S;
-  $.ajax({url: url,
-          success: function(cur_sam){
-            console.log("cur_sam",cur_sam);
-            processNewSamples(cur_sam);
-          },
-          error: function(xhr, ajaxOptions, thrownError) {
-	    console.log("Error!" + xhr.status);
-	    console.log(thrownError);
-            stop_interval_timer();
-            $("#livetoggle").prop("checked",false);
-          }
-         });
-}
-
-function stop_interval_timer() {
-  clearInterval(intervalID);
-  intervalID = null;
-  $("#livetoggle").prop("checked",false);
-}
-
-function start_interval_timer() {
-  if (intervalID) {
-    stop_interval_timer();
-  }
-  intervalID = setInterval(
-    function() {
-      getPIRDSData();
-    },
-    DATA_RETRIEVAL_PERIOD);
-  $("#livetoggle").prop("checked",true);
-}
-function toggle_interval_timer() {
-  if (intervalID) {
-    stop_interval_timer();
-  } else {
-    start_interval_timer();
-  }
-}
-
 
 export default PressureGraph;
