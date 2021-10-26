@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import values from "postcss-modules-values";
+import qs from 'qs';
+
+// TODO: Move this to a configuration file so it is in one place!
+const DSERVER_URL = "https://ventos.dev/ventos";
+// const DSERVER_URL = "http://127.0.0.1:8000";
 
 export default function TV() {
   // modal
@@ -9,7 +14,7 @@ export default function TV() {
 
   // Pimax
   const initialFormState = {
-    val: "500",
+    val: 500,
   };
 
   const [newFormValues, setNewFormValues] = useState(initialFormState);
@@ -23,18 +28,24 @@ export default function TV() {
 
   const UpdateOnSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("https://ventos.dev/ventos/300", {
+    var url = DSERVER_URL + "/control/";
+    var data = {
         com: "C",
-        par: "P",
+        par: "V",
         int: "T",
         mod: 0,
-        val: newFormValues,
-      })
-      .then(function (response) {
+        val: parseInt(newFormValues.val)
+    };
+    const options = {
+      url: url,
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify(data),
+    };
+    axios(options).then(function (response) {
         console.log(response);
         console.log(newFormValues);
-      });
+    });
   };
 
   return (

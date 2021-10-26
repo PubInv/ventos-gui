@@ -151,11 +151,6 @@ function processNewSamples(samples) {
         titlefont: {color: 'yellow'},
         tickfont: {color: 'yellow'}
       },
-      // xaxis3: {domain: [0.0,1.0],
-      //         range : [0,maxseconds]},
-      // yaxis3: {
-      //   range: [-100.0, 100.0]
-      // },
       grid: {
         rows: 2,
         columns: 1,
@@ -216,17 +211,15 @@ function add_samples(cur_sam) {
                    && t.num === s.num
                    && t.event === s.event
                    && t.val === s.val) === index);
-  console.log("after add",samples.length);
 }
 
 function getPIRDSData() {
   const DSERVER_URL = "https://ventos.dev/ventos";
+//  const DSERVER_URL = "http://127.0.0.1:8000";
   const url = DSERVER_URL + "/"+ MAX_SAMPLES_TO_STORE_S;
   $.ajax({url: url,
           success: function(cur_sam){
-//            console.log("cur_sam",cur_sam);
             add_samples(cur_sam);
-            console.log("length",samples.length);
             processNewSamples(samples);
           },
           error: function(xhr, ajaxOptions, thrownError) {
