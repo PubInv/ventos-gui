@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import values from "postcss-modules-values";
+import qs from "qs";
 
 export default function PIMAX() {
   // modal
@@ -9,7 +10,7 @@ export default function PIMAX() {
 
   // Pimax
   const initialFormState = {
-    val: "50",
+    val: 50,
   };
 
   const [newFormValues, setNewFormValues] = useState(initialFormState);
@@ -23,18 +24,26 @@ export default function PIMAX() {
 
   const UpdateOnSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("https://ventos.dev/ventos/control", {
-        com: "C",
-        par: "P",
-        int: "T",
-        mod: 0,
-        val: 35,
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(newFormValues);
-      });
+    var url = process.env.REACT_APP_DSERVER_URL + "/control/";
+
+    var data = {
+      com: "C",
+      par: "P",
+      int: "T",
+      mod: 0,
+      val: 10 * parseInt(newFormValues.val), // PIRDS uses mm H2O
+    };
+    const options = {
+      url: url,
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      data: qs.stringify(data),
+    };
+
+    axios(options).then(function (response) {
+      console.log(response);
+      console.log(newFormValues);
+    });
   };
 
   return (

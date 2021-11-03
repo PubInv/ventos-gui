@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import values from "postcss-modules-values";
+import qs from "qs";
 
 export default function IE() {
   // modal
@@ -23,18 +24,39 @@ export default function IE() {
 
   const UpdateOnSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("https://ventos.dev/ventos/300", {
-        com: "C",
-        par: "P",
-        int: "T",
-        mod: 0,
-        val: newFormValues,
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(newFormValues);
-      });
+    e.preventDefault();
+    var url = process.env.REACT_APP_DSERVER_URL + "/control/";
+
+    // Note: PIRCS uses E:I ratio times 10, NOT I:E ratio.
+    // This GUI element should probably really have to states.
+    // I will for the time being, however, assume it is in the
+    // form I:E. If there is no colon in the string, we have to punt.
+    var vs = newFormValues.val.split(":");
+    if (vs.length != 2) {
+      console.log("INTERNAL GUI ERROR: I:E value just have colon");
+    }
+    var internal = parseInt(vs[0]);
+    var external = parseInt(vs[1]);
+    var EtoI = (10 * external) / internal;
+
+    var data = {
+      com: "C",
+      par: "I",
+      int: "T",
+      mod: 0,
+      val: EtoI, // PIRDS uses mm H2O
+    };
+    const options = {
+      url: url,
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      data: qs.stringify(data),
+    };
+
+    axios(options).then(function (response) {
+      console.log(response);
+      console.log(newFormValues);
+    });
   };
 
   return (

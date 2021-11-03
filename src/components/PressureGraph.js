@@ -1,9 +1,19 @@
 import React from "react";
 import Plot from "react-plotly.js";
+import $ from 'jquery';
 
 const ran = () => {
   return Math.random();
 };
+
+
+var DATA_RETRIEVAL_PERIOD = 500;
+var intervalID = null;
+
+var MAX_SAMPLES_TO_STORE_S = 2000;
+var MAX_REFRESH = false;
+var samples = [];
+var INITS_ONLY = true;
 
 function PressureGraph() {
   return (
@@ -58,5 +68,6 @@ function PressureGraph() {
     </div>
   );
 }
+
 
 export default PressureGraph;

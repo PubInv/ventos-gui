@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import values from "postcss-modules-values";
+import qs from "qs";
 
 export default function RR() {
   // modal
@@ -9,7 +10,7 @@ export default function RR() {
 
   // Pimax
   const initialFormState = {
-    val: "10",
+    val: 10,
   };
 
   const [newFormValues, setNewFormValues] = useState(initialFormState);
@@ -23,18 +24,26 @@ export default function RR() {
 
   const UpdateOnSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("https://ventos.dev/ventos/300", {
-        com: "C",
-        par: "P",
-        int: "T",
-        mod: 0,
-        val: newFormValues,
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(newFormValues);
-      });
+    var url = process.env.REACT_APP_DSERVER_URL + "/control/";
+
+    var data = {
+      com: "C",
+      par: "B",
+      int: "T",
+      mod: 0,
+      val: parseInt(newFormValues.val),
+    };
+    const options = {
+      url: url,
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      data: qs.stringify(data),
+    };
+
+    axios(options).then(function (response) {
+      console.log(response);
+      console.log(newFormValues);
+    });
   };
 
   return (

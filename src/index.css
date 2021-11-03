@@ -228,7 +228,7 @@ input:checked + .slider:before {
 .headingInfo {
   color: cornflowerblue;
 }
-.PFGraph {
+#PFGraph {
   background-color: black;
 }
 /* The Close Button */
@@ -249,4 +249,9 @@ input:checked + .slider:before {
 }
 .btn btn-danger {
   background-color: #2196f3;
+}
+
+
+plot-container plotly {
+  background-color: black;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import VolumeGraph from "./VolumeGraph";
-import PressureGraph from "./PressureGraph";
+// import VolumeGraph from "./VolumeGraph";
+// import PressureGraph from "./PressureGraph";
 import PIMAX from "./settings/PIMAX";
 import TV from "./settings/TV";
 import RR from "./settings/RR";
@@ -13,9 +13,6 @@ function ClinicalDisplay() {
     <div className="flex flex-col w-screen text-green-600 bg-black ">
       <div className="flex justify-between">
         <div className="mt-4 ml-10 border-2 border-solid border-cyan-100-accent w-96">
-          <div>
-            <PressureGraph />
-          </div>
           <div className="flex justify-between mx-2">
             <div className="flex flex-col w-1/2">
               <p>hello</p>
@@ -72,8 +69,8 @@ function ClinicalDisplay() {
             </div>
           </div>
         </div>
-        <div className="mt-4">
-          <VolumeGraph />
+
+        <div id='PFGraph'>
         </div>
 
         <div className="flex flex-col mt-4 mr-10 w-96">
