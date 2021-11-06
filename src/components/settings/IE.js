@@ -108,7 +108,7 @@ export default function IE() {
                           name="val"
                           value={newFormValues.val}
                           onChange={updateOnChange}
-                          placeholder="New Pimax"
+                          placeholder="New IE"
                           required
                           className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         ></input>
@@ -132,7 +132,7 @@ export default function IE() {
                   type="button"
                   class="mt-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                  Cancel
+                  Close
                 </button>
               </div>
             </div>

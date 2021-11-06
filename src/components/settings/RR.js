@@ -57,38 +57,75 @@ export default function RR() {
         RR<br></br>
         {newFormValues.val}
       </button>
-      <Modal isOpen={modalOpen}>
-        <div className="flex justify-center h-full p-40 bg-blue-100">
-          <span className="flex-grow">
-            <form id="RRform" onSubmit={UpdateOnSubmit}>
-              <input
-                className="mr-20 w-50 border-1"
-                name="val"
-                value={newFormValues.val}
-                onChange={updateOnChange}
-                placeholder="New TV"
-              />
-            </form>
-          </span>
-          <span className="flex-shrink-0 ml-4">
-            <button
-              type="submit"
-              form="RRform"
-              className="ml-12 font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-            >
-              Submit
-            </button>
-          </span>
-        </div>
-
-        <button
-          onClick={(e) => {
-            setModalOpen(false);
-          }}
+      {modalOpen ? (
+        <div
+          class="fixed z-10 inset-0 h-full overflow-y-auto -mt-64"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
         >
-          Close modal
-        </button>
-      </Modal>
+          <div class="flex items-end justify-center h-full pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity "
+              aria-hidden="true"
+            ></div>
+            <span
+              class="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div class="h-auto inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all  sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                  <div class="flex flex-col items-start justify-center h-auto mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-3/4">
+                    <h3
+                      class="text-lg leading-6 font-medium text-gray-900"
+                      id="modal-title"
+                    >
+                      RR
+                    </h3>
+                    <div class="mt-4 w-full flex row items-center justify-center">
+                      <div class="mt-2 w-1/2">
+                        <input
+                          id="value"
+                          name="val"
+                          value={newFormValues.val}
+                          onChange={updateOnChange}
+                          placeholder="New RR"
+                          required
+                          className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        ></input>
+                      </div>
+                      <button
+                        onClick={UpdateOnSubmit}
+                        type="button"
+                        class="mt-2 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  onClick={(e) => {
+                    setModalOpen(false);
+                  }}
+                  type="button"
+                  class="mt-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
