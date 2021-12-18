@@ -4,17 +4,8 @@ import ClinicalDisplay from "./components/ClinicalDisplay";
 function App() {
   return (
     <div className="App">
-      <div className="jumbotron">
-        <h1 className="display-4">VentMon Respiration Analysis</h1>
-        <p className="lead">
-          This is a work in progress of{" "}
-          <a href="https://www.pubinv.org">Public Invention</a>. It can be
-          attached to a data server to produce an interactive or static analysis
-          of a respiration. It&#39;s primary purpose is to test pandemic
-          ventilators, but it is free software meant to be reused for other
-          purposes.
-        </p>
-      </div>
+        <h1 className="display-4">VentOS Clinical GUI</h1>
+        <p className="lead">This is a work in progress.</p>
 
       <div class="input-group mb-3">
         <div class="input-group-prepend">
