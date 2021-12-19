@@ -1,72 +1,37 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-export default function ServerConfigForm({dispatch}) {
+export default function ServerConfigForm({dispatch, ventilator_session}) {
 
-return <form>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon3">
-        PIRDS data server url:
-      </span>
-    </div>
-    <input
-      type="text"
-      class="form-control"
-      id="dserverurl"
-      aria-describedby="basic-addon3"
-    />
+const initialValues=ventilator_session
 
-    <div class="input-group-append">
-      <a
-        class="btn btn-outline-dark btn-sm"
-        href="#"
-        role="button"
-        id="useofficial"
-      >
-        Use Ventmon Data Lake: ventmon.coslabs.com
-      </a>
-    </div>
-  </div>
+return <Formik
+        initialValues={initialValues}
+      onSubmit={async (values) => {
+        dispatch({type: 'patch', value: {ventilator_session: values}})
+        //await new Promise((r) => setTimeout(r, 500));
+        //alert(JSON.stringify(values, null, 2));
+      }}
+    >
+    <Form>
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon3">
-        Trace ID:
-      </span>
-    </div>
-    <input
-      type="text"
-      class="form-control"
-      id="traceid"
-      aria-describedby="basic-addon3"
-    />
-  </div>
+    <label htmlFor="dserverurl">Server URL:</label>
+    <Field type="url" id="dserverurl" name="dserverurl" />
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" for="samples_to_plot">
+    <label htmlFor="traceid">Trace ID:</label>
+    <Field type="text" id="traceid" name="traceid" />
+
+    <label htmlFor="samples_to_plot">
         Number of Samples (~10s per 15000 samples):
-      </span>
-    </div>
-    <input
-      type="text"
-      class="form-control"
-      id="samples_to_plot"
-      aria-describedby="samples_to_plot"
-    />
-  </div>
+    </label>
+    <Field type="text" id="samples_to_plot" name="samples_to_plot" />
 
-  <div>
-    <label for="livetoggle">Plot Live:</label>
-    <label class="switch">
-      <input type="checkbox" id="livetoggle" checked />
-      <span class="slider round"></span>
-    </label>
-    <label for="displaytoggle">Clinical Display:</label>
-    <label class="switch">
-      <input type="checkbox" id="displaytoggle" />
-      <span class="slider round"></span>
-    </label>
-  </div>
-</form>
+    <label htmlFor="livetoggle">Plot Live:</label>
+    <Field type="checkbox" id="livetoggle" name="livetoggle" checked />
+
+    <label htmlFor="displaytoggle">Clinical Display:</label>
+    <Field type="checkbox" id="displaytoggle" name="displaytoggle" />
+
+    <button type="submit">Update</button>
+  </Form>
+</Formik>
 }
