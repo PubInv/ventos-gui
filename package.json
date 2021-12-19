@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.23.0",
     "dotenv": "^10.0.0",
+    "formik": "^2.2.9",
     "jquery": "^3.6.0",
     "plotly.js": "^1.58.5",
     "plotly.js-dist": "^2.5.1",
@@ -19,7 +20,8 @@
     "react-plotly.js": "^2.5.1",
     "react-responsive-modal": "^6.1.0",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "craco start",
