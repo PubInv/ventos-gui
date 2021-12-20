@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+//import Modal from "react-modal";
 import axios from "axios";
-import values from "postcss-modules-values";
+//jimport values from "postcss-modules-values";
 import qs from "qs";
 
 export default function IE() {
@@ -32,7 +32,7 @@ export default function IE() {
     // I will for the time being, however, assume it is in the
     // form I:E. If there is no colon in the string, we have to punt.
     var vs = newFormValues.val.split(":");
-    if (vs.length != 2) {
+    if (vs.length !== 2) {
       console.log("INTERNAL GUI ERROR: I:E value just have colon");
     }
     var internal = parseInt(vs[0]);

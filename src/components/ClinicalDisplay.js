@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+//import Modal from "react-modal";
 // import VolumeGraph from "./VolumeGraph";
 // import PressureGraph from "./PressureGraph";
 import PIMAX from "./settings/PIMAX";

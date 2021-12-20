@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+//import Modal from "react-modal";
 import axios from "axios";
-import values from "postcss-modules-values";
+//import values from "postcss-modules-values";
 import qs from "qs";
 
 export default function TV() {
