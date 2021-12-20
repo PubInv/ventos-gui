@@ -28,7 +28,7 @@ return <Formik
     <Field type="text" id="samples_to_plot" name="samples_to_plot" />
 
     <label htmlFor="livetoggle">Plot Live:</label>
-    <Field type="checkbox" id="livetoggle" name="livetoggle" checked />
+    <Field type="checkbox" id="livetoggle" name="livetoggle" />
 
     <label htmlFor="displaytoggle">Clinical Display:</label>
     <Field type="checkbox" id="displaytoggle" name="displaytoggle" />

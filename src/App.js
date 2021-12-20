@@ -1,7 +1,11 @@
 import "./App.css";
 import ClinicalDisplay from "./components/ClinicalDisplay";
 import ServerConfigForm from "./components/ServerConfigForm";
-import { useReducer } from 'react';
+import { useReducer,
+  useEffect,
+  //useState
+  } from 'react';
+import {server} from './PIRServer'
 
 const initialState = {
   display_mode: 'clinical',
@@ -9,11 +13,15 @@ const initialState = {
           dserverurl: 'https://ventos.dev/ventos',
           traceid: '102',
           samples_to_plot: '1000',
-          livetoggle: '',
+          livetoggle: false,
           displaytoggle: '',
       }
 };
 
+
+/**
+ * Standard state modify function to generate a new object based an event.
+ */
 function reducer(state, action) {
   switch (action.type) {
     case 'patch':
@@ -25,10 +33,19 @@ function reducer(state, action) {
   }
 }
 
+// core react component
 function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   console.log('state', JSON.stringify(state, null, 2))
+
+  useEffect(() => {
+    const settings = server.default_ventilator_session
+    console.log('settings', settings)
+    server.start(settings)
+    return () => server.halt();
+  }, []);
+
   return (
     <div className="App">
       <h1 className="display-4">VentOS Clinical GUI
