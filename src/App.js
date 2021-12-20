@@ -9,13 +9,8 @@ import {server} from './PIRServer'
 
 const initialState = {
   display_mode: 'clinical',
-  ventilator_session: {
-          dserverurl: 'https://ventos.dev/ventos',
-          traceid: '102',
-          samples_to_plot: '1000',
-          livetoggle: false,
-          displaytoggle: '',
-      }
+  live: true,
+  ventilator_session: {}
 };
 
 
@@ -46,6 +41,11 @@ function App() {
     return () => server.halt();
   }, []);
 
+  const setServer = (live) => {
+    live ? server.start() : server.halt()
+    dispatch({type: 'patch', value: {live}})
+  }
+
   return (
     <div className="App">
       <h1 className="display-4">VentOS Clinical GUI
@@ -56,6 +56,9 @@ function App() {
          ventilator_session={state.ventilator_session}
          dispatch={dispatch}/>
     <p className="lead">This is a work in progress.</p>
+      <button onClick={() => setServer(!state.live)} >
+        {state.live ? 'stop' : 'pause'}
+      </button>
     </div>
   );
 }

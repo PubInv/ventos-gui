@@ -9,8 +9,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-
-//$(document ).ready(function() {
-//  start_interval_timer();
-//});
