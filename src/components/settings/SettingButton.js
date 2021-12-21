@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
-import qs from "qs";
 
 export default function SettingButton({setting, onChange}) {
-  // modal
-  const [editing, setEditing] = useState(false);
+
   const [newFormValue, setNewFormValue] = useState(setting.value);
 
   const updateOnChange = (e) => {
@@ -26,9 +23,7 @@ export default function SettingButton({setting, onChange}) {
     }
   };
 
-  return <div
-  className="flex justify-center h-100 bg-cyan-300 border-2 border-solid w-100% p-10 m-5 rounded-lg text-black"
-      >
+  return <div className="" >
     <div>{setting.name}</div>
     <div>
     <form
