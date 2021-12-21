@@ -72,9 +72,7 @@ const PIRCS = (name, value) => {
     data: qs.stringify(data),
   };
   axios(options).then(function (response) {
-    alert('A communication error has occurred')
     console.log(response);
-    console.log(newFormValues);
   });
 };
 
