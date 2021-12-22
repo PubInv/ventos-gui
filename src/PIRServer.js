@@ -68,6 +68,8 @@ function getPIRDS() {
   $.ajax({
     url: url,
     success: function(new_samples){
+//      console.log(
+//        `adding ${new_samples.length} to existing ${samples.length} samples`)
       if (new_samples) {
         samples = concatSamples(samples, new_samples, MAX_SAMPLES_TO_STORE_S);
         plot(samples);

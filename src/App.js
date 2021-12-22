@@ -57,7 +57,7 @@ function App() {
          dispatch={dispatch}/>
     <p className="lead">This is a work in progress.</p>
       <button onClick={() => setServer(!state.live)} >
-        {state.live ? 'stop' : 'pause'}
+        {state.live ? 'stop' : 'start'} data fetch
       </button>
     </div>
   );

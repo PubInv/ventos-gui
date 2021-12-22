@@ -7,33 +7,28 @@
 // Our goal is to warn about this, but for now we will just
 // ignore and correct.
 function sanitize_samples(samples) {
-  samples.forEach(s =>
-                  {
-                    if (s.event === "M") {
-                      if ("string" === (typeof s.ms))
-                        s.ms = parseInt(s.ms);
-                      if ("string" === (typeof s.val))
-                        s.val = parseInt(s.val);
-                      if ("string" === (typeof s.num))
-                        s.num = parseInt(s.num);
-                      if (s.ms < 0) {
-                        s.ms = -s.ms; // fixme! what is going on here???
-                      } else if (s.event === "E") {
-                      }
-                    }
-
-                  });
+  samples.forEach(s => {
+    if (s.event === "M") {
+      if ("string" === (typeof s.ms))
+        s.ms = parseInt(s.ms);
+      if ("string" === (typeof s.val))
+        s.val = parseInt(s.val);
+      if ("string" === (typeof s.num))
+        s.num = parseInt(s.num);
+      if (s.ms < 0) {
+        s.ms = -s.ms; // fixme! what is going on here???
+        console.error('negative timestamp!!')
+      } else if (s.event === "E") {
+        // fixme - is this needed??
+      }
+    }
+  });
   return samples;
 }
 
 // note: not guaranteeed to get samples in order
 export function concatSamples(samples, new_samples, MAX_SAMPLES_TO_STORE_S) {
-  new_samples = sanitize_samples(new_samples);
-  var discard = Math.max(0,
-    samples.length + new_samples.length - MAX_SAMPLES_TO_STORE_S);
-  samples = samples.slice(discard); // fixme this should happen after the merge
-  samples = samples.concat(new_samples);
-  // fixme should be sorting new samples not old samples
+  samples = samples.concat(sanitize_samples(new_samples));
   samples.sort((a,b) => a.ms < b.ms);
   // de-dupe - fixme de-duping should scan lists based on timestamps
   samples = samples.filter((s, index, self) =>
@@ -43,6 +38,8 @@ export function concatSamples(samples, new_samples, MAX_SAMPLES_TO_STORE_S) {
       && t.num === s.num
       && t.event === s.event
       && t.val === s.val) === index);
+  var discard = Math.max(0, samples.length - MAX_SAMPLES_TO_STORE_S);
+  samples = samples.slice(discard);
   return samples
 }
 
