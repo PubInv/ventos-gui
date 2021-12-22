@@ -28,17 +28,19 @@ function sanitize_samples(samples) {
 
 // note: not guaranteeed to get samples in order
 export function concatSamples(samples, new_samples, MAX_SAMPLES_TO_STORE_S) {
+  function PIRDSEquals(a, b) {
+    return a.ms === b.ms
+      && a.type === b.type
+      && a.loc === b.loc
+      && a.num === b.num
+      && a.event === b.event
+      && a.val === b.val
+  }
   samples = samples.concat(sanitize_samples(new_samples));
   samples.sort((a,b) => a.ms < b.ms);
-  // de-dupe - fixme de-duping should scan lists based on timestamps
-  samples = samples.filter((s, index, self) =>
-    self.findIndex(t => t.ms === s.ms
-      && t.type === s.type
-      && t.loc === s.loc
-      && t.num === s.num
-      && t.event === s.event
-      && t.val === s.val) === index);
-  var discard = Math.max(0, samples.length - MAX_SAMPLES_TO_STORE_S);
+  // de-dupe sorted list:
+  samples = samples.filter((item, index, list) => !index || !PIRDSEquals(item, list[index-1]))
+  const discard = Math.max(0, samples.length - MAX_SAMPLES_TO_STORE_S);
   samples = samples.slice(discard);
   return samples
 }
