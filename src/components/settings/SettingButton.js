@@ -13,29 +13,28 @@ export default function SettingButton({setting, onChange}) {
   };
 
   const onSubmit = (e) => {
-    const decision = window.confirm(
-      `Please confirm setting ${setting.name} to ${newFormValue}`)
-    // fixme - need nicer way to do this!
-    if (decision) {
-      onChange(setting.name, newFormValue)
-    } else {
-      setNewFormValue(setting.value);
+    if (setting.name !== newFormValue) {
+      const decision = window.confirm(
+        `Please confirm setting ${setting.name} to ${newFormValue}`)
+      // fixme - need nicer way to do this!
+      if (decision) {
+        onChange(setting.name, newFormValue)
+      } else {
+        setNewFormValue(setting.value);
+      }
     }
   };
 
-  return <div className="" >
-    <div>{setting.name}</div>
-    <div>
-    <form
-        onReset={onReset}
-        onSubmit={onSubmit}
-    >
-    <input id="value" name="val" value={newFormValue}
-        onChange={updateOnChange}
-        placeholder="New IE" required
-        className=""
-      ></input>
-    </form >
+  return <div className="card mx-2 p-3 text-white bg-dark" >
+    <div className='class-body'>
+    <div className='class-header text-center'>{setting.name}</div>
+      <form onReset={onReset} onSubmit={onSubmit} >
+        <input id="value" name="val" value={newFormValue}
+            onChange={updateOnChange}
+            placeholder={setting.name} required
+            className="form-control form-control-lg"
+          ></input>
+      </form >
     </div>
   </div>
 }
