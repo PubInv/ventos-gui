@@ -50,7 +50,7 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [showLeftPanel, setShowLeftPanel] = useState(true);
+  const [uiMode, setUIMode] = useState('server_config');
 
   // fixme needs to capture some kind of promise
   function newSetting(field, value) {
@@ -82,11 +82,11 @@ function App() {
       </h1>
     </div>
     <div className='row'>
-        {showLeftPanel ? (
+        {uiMode === 'server_config' ? (
           <div className='col-2 bg-dark text-info'>
               <button type="button"
                 className='float-end btn btn-dark'
-                onClick={() => setShowLeftPanel(false)} >X</button>
+                onClick={() => setUIMode(false)} >X</button>
             <div className=''>
               <ServerConfigForm
                  ventilator_session={state.ventilator_session}
@@ -121,15 +121,17 @@ function App() {
           <div className='card card m-1 p-3 text-white bg-dark'>
           <button type="button"
              className='btn-info'
-             onClick={() => setShowLeftPanel(true)} >
-            Settings
+             onClick={() => setUIMode('server_config')} >
+              <Gear />
           </button>
         </div>
         </div>
     </div>
   </div>
   <p className=''>This is a work in progress.</p>
-    <button onClick={() => setServer(!state.live)} >
+    <button onClick={() => setServer(!state.live)}
+    className={state.live ? 'btn-danger' : 'btn-success'}
+  >
       {state.live ? 'stop' : 'start'} data fetch
     </button>
   </div>);
