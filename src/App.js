@@ -6,6 +6,7 @@ import { useReducer,
 import {server} from './PIRServer'
 import ServerConfigForm from "./components/ServerConfigForm";
 import SettingButton from "./components/SettingButton";
+import { ArrowRight, Gear } from 'react-bootstrap-icons';
 
 const initialState = {
   display_mode: 'clinical',
