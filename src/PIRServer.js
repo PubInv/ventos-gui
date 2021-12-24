@@ -12,12 +12,12 @@ var settings = {}
 var samples = []
 
 const sendPIRCS = (name, value) => {
+  // translate name and value setting to PIRCs equivalant
   const par = pircsParameter(name)
   const val = pircsValue(par, value)
   const int = pircsInterpretation(name)
-  var url = process.env.REACT_APP_DSERVER_URL + "/control/";
-
-  // name = TV
+  const DSERVER_URL = settings.dserverurl; //"https://ventos.dev/ventos";
+  var url = DSERVER_URL + "/control/";
   var data = {com: "C", par, int, mod: 0, val};
   const options = {
     url: url,
@@ -25,6 +25,7 @@ const sendPIRCS = (name, value) => {
     headers: { "content-type": "application/x-www-form-urlencoded" },
     data: qs.stringify(data),
   };
+  // fixme needs an error handler
   axios(options).then(function (response) {
     console.log(response);
   });

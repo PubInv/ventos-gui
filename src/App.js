@@ -5,7 +5,7 @@ import { useReducer,
   } from 'react';
 import {server} from './PIRServer'
 import ServerConfigForm from "./components/ServerConfigForm";
-import SettingButton from "./components/settings/SettingButton";
+import SettingButton from "./components/SettingButton";
 
 const initialState = {
   display_mode: 'clinical',
@@ -51,16 +51,20 @@ function App() {
   // const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
 
+  // fixme needs to capture some kind of promise
   function newSetting(field, value) {
+    server.sendPIRCS(field, value)
     alert(field, value)
   }
 
   console.log('restarting app: state', JSON.stringify(state, null, 2))
 
   useEffect(() => {
+    // start server
     const settings = server.default_ventilator_session
     console.log('settings', settings)
     server.start(settings)
+    // return function to shut down the server for clean exit
     return () => server.halt();
   }, []);
 
@@ -106,7 +110,7 @@ function App() {
           </div>)}
       </div>
     </div>
-    <div className='row bg-info py-2'>
+    <div className='row bg-dark py-2'>
       {settings.map((s) =>
         <div className='col'>
           <SettingButton key={s.name}
@@ -115,9 +119,9 @@ function App() {
         <div className='col'>
           <div className='card card m-1 p-3 text-white bg-dark'>
           <button type="button"
-             className='btn-dark'
+             className='btn-info'
              onClick={() => setShowLeftPanel(true)} >
-            Show
+            Settings
           </button>
         </div>
         </div>
