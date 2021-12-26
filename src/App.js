@@ -6,7 +6,8 @@ import { useReducer,
 import {server} from './PIRServer'
 import ServerConfigForm from "./components/ServerConfigForm";
 import SettingButton from "./components/SettingButton";
-import { ArrowRight, Gear } from 'react-bootstrap-icons';
+import Graph from "./components/Graph";
+import { Gear } from 'react-bootstrap-icons';
 
 const initialState = {
   display_mode: 'clinical',
@@ -51,6 +52,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
   const [uiMode, setUIMode] = useState('server_config');
+  const [data, setData] = useState({pressure: {}, flow: {}});
 
   // fixme needs to capture some kind of promise
   function newSetting(field, value) {
@@ -61,8 +63,14 @@ function App() {
   console.log('restarting app: state', JSON.stringify(state, null, 2))
 
   useEffect(() => {
+    function newData(new_data) {
+      // shallow copy so react know's to redraw
+      setData({...new_data})
+    }
+
     // start server
     const settings = server.default_ventilator_session
+    settings.callback = newData
     console.log('settings', settings)
     server.start(settings)
     // return function to shut down the server for clean exit
@@ -95,6 +103,7 @@ function App() {
         </div>
       ) : (<></>)}
       <div className='col'>
+        <Graph data={data} params={{data:[]}}/>
         <div id="PFGraph"></div>
       </div>
         <div className='col-2 bg-dark text-success'>

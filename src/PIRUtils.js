@@ -1,6 +1,13 @@
 /**
  * Module to provide generic functions to support PIRCS and PIRDS data
  */
+export function seconds(ms) {
+  return Math.floor(ms / 1000)
+}
+
+export function slice(ms, milliseconds_per_step) {
+  return Math.floor(ms % 1000 / milliseconds_per_step)
+}
 
 // WARNING: This is a hack...if the timestamp is negative,
 // we treat it as a limited (beyond range of sensor) measurement.
@@ -26,23 +33,58 @@ function sanitize_samples(samples) {
   return samples;
 }
 
+export function is_flow(PIRDS) {
+  return PIRDS.event === 'M' && PIRDS.type === 'F'
+}
+
+export function is_pressure(PIRDS) {
+  return PIRDS.event === 'M'
+    && PIRDS.type === 'D'
+    && (PIRDS.loc === 'A' || PIRDS.loc === 'I')
+}
+
+// check if two PIRDS items are duplicates
+function PIRDSEquals(a, b) {
+  return a.ms === b.ms
+    && a.type === b.type
+    && a.loc === b.loc
+    && a.num === b.num
+    && a.event === b.event
+    && a.val === b.val
+}
+
+// mutate the series to add in new data
+// uses series as an object indexed by second
+// each second stores the an array [min, max] for each slice
+export function concat_series(series, new_samples, type, milliseconds_per_step) {
+  // chose the appropriate filter function
+  const filter = {flow: is_flow, pressure: is_pressure}[type]
+  new_samples.filter(filter).forEach(PIRD => {
+    const second = seconds(PIRD.ms)
+    const s = slice(PIRD.ms, milliseconds_per_step)
+    const val = PIRD.val
+    if (!series[second]) { // first data for this second
+      series[second] = []
+    }
+    if (!series[second][s]) { // first data for this slice
+      series[second][s] = [val, val] // save value as min & max
+    } else if (series[second][s][0] > val) { //new min value
+      series[second][s][0] = val
+    } else if (series[second][s][1] < val) { // new max value
+      series[second][s][1] = val
+    }
+  })
+}
+
 // note: not guaranteeed to get samples in order
-export function concatSamples(samples, new_samples, MAX_SAMPLES_TO_STORE_S) {
-  function PIRDSEquals(a, b) {
-    return a.ms === b.ms
-      && a.type === b.type
-      && a.loc === b.loc
-      && a.num === b.num
-      && a.event === b.event
-      && a.val === b.val
-  }
-  samples = samples.concat(sanitize_samples(new_samples));
+// This function mutates the series object
+export function concatSamples(series, new_samples, MAX_SAMPLES_TO_STORE_S) {
+  var samples = series.samples.concat(sanitize_samples(new_samples));
   samples.sort((a,b) => a.ms < b.ms);
   // de-dupe sorted list:
   samples = samples.filter((item, index, list) => !index || !PIRDSEquals(item, list[index-1]))
   const discard = Math.max(0, samples.length - MAX_SAMPLES_TO_STORE_S);
-  samples = samples.slice(discard);
-  return samples
+  series.samples = samples.slice(discard);
 }
 
 // https://github.com/PubInv/PIRCS-pubinv-respiration-control-standard/blob/master/PIRCS.md
