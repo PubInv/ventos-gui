@@ -10,7 +10,7 @@ import qs from "qs";
 var intervalId = 0
 const DATA_RETRIEVAL_PERIOD = 5000;
 const MAX_SAMPLES_TO_STORE_S = 2000;
-const settings = { }
+var settings = { }
 
 const data = {
   // second indexed arrays, with each array element being span of data:
@@ -72,6 +72,7 @@ export const server = {
   },
   isLive: () => settings.live,
   settings: () => settings,
+  getData: () => data,
   sendPIRCS,
 }
 

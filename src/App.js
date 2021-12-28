@@ -50,9 +50,7 @@ function reducer(state, action) {
 function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
   const [uiMode, setUIMode] = useState('server_config');
-  const [data, setData] = useState({pressure: {}, flow: {}});
 
   // fixme needs to capture some kind of promise
   function newSetting(field, value) {
@@ -63,9 +61,9 @@ function App() {
   console.log('restarting app: state', JSON.stringify(state, null, 2))
 
   useEffect(() => {
+    // this is currently unused
     function newData(new_data) {
-      // shallow copy so react know's to redraw
-      setData({...new_data})
+      console.log('new data', new_data)
     }
 
     // start server
@@ -103,7 +101,7 @@ function App() {
         </div>
       ) : (<></>)}
       <div className='col'>
-        <Graph data={data} params={{data:[]}}/>
+        <Graph getData={server.getData} params={{}}/>
         <div id="PFGraph"></div>
       </div>
         <div className='col-2 bg-dark text-success'>

@@ -25,17 +25,20 @@ function stroke(ctx, x0, y0, x1, y1) {
 
 const now = seconds(Date.now())
 
-export default function Graph({data, params}) {
+export default function Graph({getData, params}) {
+
+  const [data, setData] = useState({pressure: {}, flow: {}});
 
   const [size, setSize] = useState({height:100, width:100});
   const [cursor, setCursor] = useState();
 
   const milliseconds_per_step = 50 // fixme!! (should come from settings!)
   const lag_seconds = 10 // staying behind makes the display smoother!
-  const fps = 2;
+  const fps = 20;
   const pixels_per_frame = 2
+  const clear_width_s = 1 // second
 
-  useEffect(animate, []);
+  useEffect(animate, [getData]);
 
   function summarise_data(data) {
     const summary = {}
@@ -56,6 +59,7 @@ export default function Graph({data, params}) {
     const {width, height} = canvas.getBoundingClientRect();
     var [second_now, slice_now] = [second_0, slice_0]
     const [x_pad, y_pad] = [10, 4]
+    const clear_width_px = clear_width_s * fps * pixels_per_frame
 
     const seconds_to_show = Math.floor((width-x_pad) / (fps * pixels_per_frame))
     console.log('qqq seconds_to_show', seconds_to_show)
@@ -66,11 +70,10 @@ export default function Graph({data, params}) {
     ctx.lineWidth = "2";
     ctx.strokeStyle = 'blue';
 
-    var animation_frame
     var time_out_id
     draw();
 
-    function data_y(type, second, slice) {
+    function data_y(data, type, second, slice) {
       const s = data[type][second-lag_seconds] || []
       const y = (s[slice] || [0,0])[1]
       console.log('qq y', y)
@@ -82,6 +85,8 @@ export default function Graph({data, params}) {
 
     function draw() {
       time_out_id = setTimeout(function() {
+        const data = getData() // get the latest copy!
+        setData(data)
         var [second_last, slice_last] = [second_now, slice_now]
         const t_now = Date.now()
         second_now = seconds(t_now)
@@ -92,21 +97,18 @@ export default function Graph({data, params}) {
           (${lag_seconds}s behind) (W,H: ${width}, ${height})
           (cursor: ${cursor_pos_seconds.toFixed(2)}s  ${pad(cursor_pos_px, 5)}px)
           `)
-        const y_last = data_y('pressure', second_last, slice_last)
-        const y_now = data_y('pressure', second_now, slice_now)
-        ctx.strokeStyle = 'red';
+        const y_last = data_y(data, 'pressure', second_last, slice_last)
+        const y_now = data_y(data, 'pressure', second_now, slice_now)
+        ctx.strokeStyle = 'green';
         stroke(ctx, cursor_pos_px, y_last, cursor_pos_px+pixels_per_frame, y_now)
         ctx.strokeStyle = 'yellow';
         stroke(ctx, cursor_pos_px, height, cursor_pos_px+4, height-y_pad)
-        // console.log('qq draw', cursor_pos_px, height, cursor_pos_px+4, height-y_pad)
         // test drawing code
-        ctx.clearRect(cursor_pos_px+4, 0, cursor_pos_px+14, height);
-        animation_frame = requestAnimationFrame(draw);
+        ctx.clearRect(cursor_pos_px+4, 0, clear_width_px, height);
+        requestAnimationFrame(draw);
       }, 1000 / fps);
     }
     return () => {
-      // cancelAnimationFrame(animation_frame)
-      // alert('clean-up!')
       clearTimeout(time_out_id)
     }
   }
