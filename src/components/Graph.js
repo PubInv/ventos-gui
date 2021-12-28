@@ -68,7 +68,6 @@ export default function Graph({getData, params}) {
     const clear_width_px = clear_width_s * fps * pixels_per_frame
 
     const seconds_to_show = Math.floor((width-x_pad) / (fps * pixels_per_frame))
-    console.log('qqq seconds_to_show', seconds_to_show)
 
     setSize({width, height})
     ctx.fillStyle = "#dbbd7a";
@@ -83,7 +82,6 @@ export default function Graph({getData, params}) {
     function data_y(data, type, index, second, slice, bound) {
       const s = data[type][second-lag_seconds] || []
       const y = (s[slice] || [0,0])[bound]
-      console.log('qq y', y)
       return height - ((meta[type].scale * y)  + y_pad + (index + meta[type].offset) * plot_height)
     }
     function pad(x, digits) {

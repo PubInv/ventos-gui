@@ -1,7 +1,8 @@
 /* Module to provide HTTP/AJAX comms with a VentOS server */
 import $ from 'jquery';
-import {concatSamples, pircsParameter, pircsValue, pircsInterpretation,
-  seconds, concat_series,
+import {//concatSamples,
+  pircsParameter, pircsValue, pircsInterpretation,
+  seconds, mergeNewData,
 } from './PIRUtils';
 import axios from "axios";
 import qs from "qs";
@@ -48,6 +49,7 @@ const halt = () => {
 export const server = {
   default_ventilator_session: {
     time_zero: seconds(Date.now()) - 10,
+    seconds_to_keep: 60,
     milliseconds_per_step: 50,
     dserverurl: 'https://ventos.dev/ventos',
     seconds_to_store: 60,
@@ -75,21 +77,23 @@ export const server = {
   sendPIRCS,
 }
 
+function processNewData(new_data) {
+  data.settings = settings
+  // concatSamples(data, new_data, MAX_SAMPLES_TO_STORE_S);
+  mergeNewData(data, new_data, settings)
+  console.log('got data', data)
+  settings.callback(data)
+}
+
 function getPIRDS() {
   const DSERVER_URL = settings.dserverurl; //"https://ventos.dev/ventos";
   const url = DSERVER_URL + "/"+ MAX_SAMPLES_TO_STORE_S;
   // fixme change to axios
   $.ajax({
     url: url,
-    success: function(new_samples){
-      if (new_samples) {
-        data.settings = settings
-        concatSamples(data, new_samples, MAX_SAMPLES_TO_STORE_S);
-        ['pressure', 'flow'].forEach(
-          type => concat_series(data[type], new_samples,
-            type, settings.milliseconds_per_step))
-        console.log('got data', data)
-        settings.callback(data)
+    success: function(new_data){
+      if (new_data) {
+        processNewData(new_data)
       } else {
         alert('no samples');
         console.error('no samples');

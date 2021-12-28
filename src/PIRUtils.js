@@ -53,18 +53,22 @@ function PIRDSEquals(a, b) {
     && a.val === b.val
 }
 
-// mutate the series to add in new data
+// mutate the series to add in new data and trim old data
 // uses series as an object indexed by second
 // each second stores the an array [min, max] for each slice
-export function concat_series(series, new_samples, type, milliseconds_per_step) {
+function concat_series(series, new_samples, type, settings) {
+  var newest_second = 0
   // chose the appropriate filter function
   const filter = {flow: is_flow, pressure: is_pressure}[type]
   new_samples.filter(filter).forEach(PIRD => {
     const second = seconds(PIRD.ms)
-    const s = slice(PIRD.ms, milliseconds_per_step)
+    const s = slice(PIRD.ms, settings.milliseconds_per_step)
     const val = PIRD.val
     if (!series[second]) { // first data for this second
       series[second] = []
+      if (newest_second < second) {
+        newest_second = second
+      }
     }
     if (!series[second][s]) { // first data for this slice
       series[second][s] = [val, val] // save value as min & max
@@ -74,7 +78,21 @@ export function concat_series(series, new_samples, type, milliseconds_per_step) 
       series[second][s][1] = val
     }
   })
+  // remove old data from series
+  Object.keys(series).forEach(second => {
+    console.log('xx second, settings.seconds_to_keep, newest_second',
+        second, settings.seconds_to_keep,  newest_second)
+    if (parseInt(second) + settings.seconds_to_keep < newest_second) {
+      delete series[second]
+    }
+  })
 }
+
+export function mergeNewData(data, new_data, settings) {
+  ['pressure', 'flow'].forEach(type =>
+    concat_series(data[type], new_data, type, settings))
+}
+
 
 // note: not guaranteeed to get samples in order
 // This function mutates the series object
