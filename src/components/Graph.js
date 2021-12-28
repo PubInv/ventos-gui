@@ -14,9 +14,14 @@ import React
   from "react";
 import {seconds, slice} from '../PIRUtils';
 
-const types=['flow', 'pressure']
+const meta = {
+  flow: {scale: 5, offset: 0.5, color: 'yellow'},
+  pressure: {scale: 1, offset: 0, color: 'pink'}
+}
+const types= Object.keys(meta)
 
 function stroke(ctx, x0, y0, x1, y1) {
+  ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
@@ -34,7 +39,7 @@ export default function Graph({getData, params}) {
 
   const milliseconds_per_step = 50 // fixme!! (should come from settings!)
   const lag_seconds = 10 // staying behind makes the display smoother!
-  const fps = 20;
+  const fps = 40;
   const pixels_per_frame = 2
   const clear_width_s = 1 // second
 
@@ -57,6 +62,7 @@ export default function Graph({getData, params}) {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const {width, height} = canvas.getBoundingClientRect();
+    const plot_height = height / types.length // how high for each plot
     var [second_now, slice_now] = [second_0, slice_0]
     const [x_pad, y_pad] = [10, 4]
     const clear_width_px = clear_width_s * fps * pixels_per_frame
@@ -67,17 +73,18 @@ export default function Graph({getData, params}) {
     setSize({width, height})
     ctx.fillStyle = "#dbbd7a";
     ctx.fill();
-    ctx.lineWidth = "2";
     ctx.strokeStyle = 'blue';
 
     var time_out_id
     draw();
 
-    function data_y(data, type, second, slice) {
+    // each data point is a pair of numbers representing the range
+    const [min, max] = [0,1]
+    function data_y(data, type, index, second, slice, bound) {
       const s = data[type][second-lag_seconds] || []
-      const y = (s[slice] || [0,0])[1]
+      const y = (s[slice] || [0,0])[bound]
       console.log('qq y', y)
-      return height - y + 10
+      return height - ((meta[type].scale * y)  + y_pad + (index + meta[type].offset) * plot_height)
     }
     function pad(x, digits) {
       return ("                  "+x).slice(-digits)
@@ -97,10 +104,14 @@ export default function Graph({getData, params}) {
           (${lag_seconds}s behind) (W,H: ${width}, ${height})
           (cursor: ${cursor_pos_seconds.toFixed(2)}s  ${pad(cursor_pos_px, 5)}px)
           `)
-        const y_last = data_y(data, 'pressure', second_last, slice_last)
-        const y_now = data_y(data, 'pressure', second_now, slice_now)
-        ctx.strokeStyle = 'green';
-        stroke(ctx, cursor_pos_px, y_last, cursor_pos_px+pixels_per_frame, y_now)
+        types.forEach((type, i) => {
+          [min, max].forEach(bound => {
+            const y_last = data_y(data, type, i, second_last, slice_last, bound)
+            const y_now = data_y(data, type, i, second_now, slice_now, bound)
+            ctx.strokeStyle = meta[type].color
+            stroke(ctx, cursor_pos_px, y_last, cursor_pos_px+pixels_per_frame, y_now+2)
+          })
+        })
         ctx.strokeStyle = 'yellow';
         stroke(ctx, cursor_pos_px, height, cursor_pos_px+4, height-y_pad)
         // test drawing code
@@ -120,7 +131,7 @@ export default function Graph({getData, params}) {
        id="canvas"
        width={size.width}
        height={size.height}
-       style={{height:"250px", width:"100%", backgroundColor: 'black'}}>
+       style={{height:"500px", width:"100%", backgroundColor: 'black'}}>
     </canvas>
     <pre>
     {JSON.stringify(summarise_data(data), null, 2)}

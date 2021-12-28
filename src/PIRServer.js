@@ -3,7 +3,6 @@ import $ from 'jquery';
 import {concatSamples, pircsParameter, pircsValue, pircsInterpretation,
   seconds, concat_series,
 } from './PIRUtils';
-import {plot} from './PlotlyPlotter';
 import axios from "axios";
 import qs from "qs";
 
@@ -91,7 +90,6 @@ function getPIRDS() {
             type, settings.milliseconds_per_step))
         console.log('got data', data)
         settings.callback(data)
-        plot(data.samples);
       } else {
         alert('no samples');
         console.error('no samples');

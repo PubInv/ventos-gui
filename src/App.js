@@ -102,7 +102,6 @@ function App() {
       ) : (<></>)}
       <div className='col'>
         <Graph getData={server.getData} params={{}}/>
-        <div id="PFGraph"></div>
       </div>
         <div className='col-2 bg-dark text-success'>
           {observations.map((o) => <div key={o.name}>
