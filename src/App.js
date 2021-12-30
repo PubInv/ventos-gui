@@ -23,11 +23,11 @@ const settings = [
   {name: 'RR', value: "11", units: "/min"},
 ]
 
-const observations = [
-  {name: 'Ppeak', value: "23", units: "cmH2O"},
+const baseline_observations = [
+  {name: 'Pi', value: "23", units: "cmH2O"},
   {name: 'PEEP', value: "5", units: "cmH2O"},
-  {name: 'TV', value: "412", units: "ml"},
-  {name: 'MV', value: "4.8", units: "L"},
+  {name: 'TVe', value: "412", units: "ml"},
+  {name: 'MVe', value: "4.8", units: "L"},
   {name: 'RR', value: "11", units: "/min"},
 ]
 
@@ -51,6 +51,8 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [uiMode, setUIMode] = useState('server_config');
+  const [observations, setObservations] = useState(baseline_observations);
+  const [debug, setDebug] = useState('');
 
   // fixme needs to capture some kind of promise
   function newSetting(field, value) {
@@ -64,6 +66,22 @@ function App() {
     // this is currently unused
     function newData(new_data) {
       console.log('new data', new_data)
+      const new_observations = []
+      const summary = new_data.summary
+      console.log('xx new_data.summary', new_data.summary)
+      observations.forEach((observation) => {
+        console.log('xx observation', observation)
+        if (summary[observation.name]) {
+          new_observations.push({
+            ...observation, value: Math.round(summary[observation.name])})
+        }
+        else {
+          new_observations.push(observation)
+        }
+      })
+      console.log('xx new_observations', new_observations)
+      setObservations(new_observations)
+      setDebug(d => new_data.breaths)
     }
 
     // start server
@@ -73,7 +91,7 @@ function App() {
     server.start(settings)
     // return function to shut down the server for clean exit
     return () => server.halt();
-  }, []);
+  }, [observations]);
 
   const setServer = (live) => {
     live ? server.start() : server.halt()
@@ -102,6 +120,7 @@ function App() {
       ) : (<></>)}
       <div className='col'>
         <Graph getData={server.getData} params={{}}/>
+    <pre> {JSON.stringify(debug, null, 2)}</pre>
       </div>
         <div className='col-2 bg-dark text-success'>
           {observations.map((o) => <div key={o.name}>

@@ -1,8 +1,9 @@
 /* Module to provide HTTP/AJAX comms with a VentOS server */
 import $ from 'jquery';
 import {//concatSamples,
+  blankData,
   pircsParameter, pircsValue, pircsInterpretation,
-  seconds, mergeNewData,
+  seconds, mergeNewData, breathScan, summariseBreaths,
 } from './PIRUtils';
 import axios from "axios";
 import qs from "qs";
@@ -12,13 +13,7 @@ const DATA_RETRIEVAL_PERIOD = 5000;
 const MAX_SAMPLES_TO_STORE_S = 2000;
 var settings = { }
 
-const data = {
-  // second indexed arrays, with each array element being span of data:
-  pressure: {},
-  flow: {},
-  // list of PIRDS sorted by time stamp:
-  samples: [],
-}
+const data = blankData()
 
 const sendPIRCS = (name, value) => {
   // translate name and value setting to PIRCs equivalant
@@ -46,11 +41,13 @@ const halt = () => {
   console.log('stopped server')
 }
 
+const milliseconds_per_step = 50
 export const server = {
   default_ventilator_session: {
     time_zero: seconds(Date.now()) - 10,
     seconds_to_keep: 60,
-    milliseconds_per_step: 50,
+    milliseconds_per_step,
+    slice_per_second: 1000 / milliseconds_per_step,
     dserverurl: 'https://ventos.dev/ventos',
     seconds_to_store: 60,
     traceid: '102',
@@ -82,6 +79,9 @@ function processNewData(new_data) {
   // concatSamples(data, new_data, MAX_SAMPLES_TO_STORE_S);
   mergeNewData(data, new_data, settings)
   console.log('got data', data)
+  data.breaths = breathScan(data)
+  console.log('breaths', data.breaths)
+  data.summary = summariseBreaths(data)
   settings.callback(data)
 }
 
