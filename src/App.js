@@ -24,11 +24,11 @@ const settings = [
 ]
 
 const baseline_observations = [
-  {name: 'Pi', value: "23", units: "cmH2O"},
-  {name: 'PEEP', value: "5", units: "cmH2O"},
-  {name: 'TVe', value: "412", units: "ml"},
-  {name: 'MVe', value: "4.8", units: "L"},
-  {name: 'RR', value: "11", units: "/min"},
+  {name: 'Ppeak', value: "??", units: "cmH2O"},
+  {name: 'PEEP', value: "??", units: "cmH2O"},
+  {name: 'VTe', value: "??", units: "ml"},
+  {name: 'MVe', value: "??", units: "ml"},
+  {name: 'RR', value: "??", units: "/min"},
 ]
 
 
@@ -81,7 +81,7 @@ function App() {
       })
       console.log('xx new_observations', new_observations)
       setObservations(new_observations)
-      setDebug(d => new_data.breaths)
+      setDebug(d => new_data.summary)
     }
 
     // start server

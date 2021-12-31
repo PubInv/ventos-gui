@@ -65,8 +65,8 @@ function next(data, cursor_in, last_second, test=false, steps=1) {
 
 function seconds_between(cursor_1, cursor_2, settings) {
   const sps = settings.slice_per_second
-  return (cursor_2[CURSOR_SECONDS] + cursor_2[CURSOR_SLICE] * sps) -
-  (cursor_1[CURSOR_SECONDS] + cursor_1[CURSOR_SLICE] * sps)
+  return (cursor_2[CURSOR_SECONDS] + cursor_2[CURSOR_SLICE] / sps) -
+  (cursor_1[CURSOR_SECONDS] + cursor_1[CURSOR_SLICE] / sps)
 }
 
 // simple arithmetic mean
@@ -91,18 +91,20 @@ function last(arr) {
 // crude but adequate for now
 export function summariseBreaths(data) {
   const breaths = data.breaths
-  const epoch_length =
-    seconds_between(breaths[0].start, last(breaths).end, data.settings)
+  const start = breaths[0].start
+  const end = last(breaths).end
+  const epoch_length = seconds_between(start, end, data.settings)
   console.log('xxx breaths', breaths)
   const RR = breaths.length * (60 / epoch_length)
   const VTi = mean(breaths, 'VTi')
   const VTe = mean(breaths, 'VTe')
   const summary = {
+    start, end,
     RR, VTi, VTe,
     Ppeak: mean(breaths, 'Ppeak'),
     PEEP: mean(breaths, 'PEEP'),
     MVi: VTi * RR, MVe: VTe * RR,
-    epoch_length, breaths, // for debugging only
+    epoch_length, n_breaths: breaths.length, // for debugging only
   }
   console.log('xxx summary', summary)
   return summary
@@ -235,10 +237,11 @@ function concat_series(series, new_samples, type, settings) {
   var newest_second = 0
   // chose the appropriate filter function
   const filter = {flow: is_flow, pressure: is_pressure}[type]
+  const scale = {flow: 1, pressure: 0.1}[type]
   new_samples.filter(filter).forEach(PIRD => {
     const second = seconds(PIRD.ms)
     const s = slice(PIRD.ms, settings.milliseconds_per_step)
-    const val = PIRD.val
+    const val = PIRD.val * scale
     if (!series[second]) { // first data for this second
       series[second] = []
       if (newest_second < second) {

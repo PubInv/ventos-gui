@@ -9,7 +9,6 @@ import axios from "axios";
 import qs from "qs";
 
 var intervalId = 0
-const DATA_RETRIEVAL_PERIOD = 5000;
 const MAX_SAMPLES_TO_STORE_S = 2000;
 var settings = { }
 
@@ -45,13 +44,13 @@ const milliseconds_per_step = 50
 export const server = {
   default_ventilator_session: {
     time_zero: seconds(Date.now()) - 10,
+    server_poll_seconds: 8,
     seconds_to_keep: 60,
     milliseconds_per_step,
     slice_per_second: 1000 / milliseconds_per_step,
     dserverurl: 'https://ventos.dev/ventos',
     seconds_to_store: 60,
     traceid: '102',
-    samples_to_plot: '1000',
     live: false,
   },
   halt,
@@ -63,8 +62,7 @@ export const server = {
     settings = session_settings || settings
     console.log('xxx settings', settings)
     intervalId = setInterval(
-      function() {getPIRDS()},
-      DATA_RETRIEVAL_PERIOD);
+      function() {getPIRDS()}, settings.server_poll_seconds*1000);
     console.log('starting server', intervalId)
     settings.live = true;
   },
