@@ -28,13 +28,9 @@ function stroke(ctx, x0, y0, x1, y1) {
   ctx.stroke();
 }
 
-const now = seconds(Date.now())
-
 export default function Graph({getData, params}) {
 
-  const [data, setData] = useState({pressure: {}, flow: {}});
-
-  const [size, setSize] = useState({height:100, width:100});
+  const [size, setSize] = useState({height:800, width:1000});
   const [cursor, setCursor] = useState();
 
   const milliseconds_per_step = 50 // fixme!! (should come from settings!)
@@ -44,16 +40,6 @@ export default function Graph({getData, params}) {
   const clear_width_s = 1 // second
 
   useEffect(animate, [getData]);
-
-  function summarise_data(data) {
-    const summary = {}
-    types.forEach(type => {
-      const keys = Object.keys(data[type])
-      const relative = keys.map(i => i-now)
-      summary[type] = `${type} (${keys.length}) - ${Math.min(...relative)} ${Math.max(...relative)}`
-    })
-    return summary
-  }
 
   function animate() {
     const t_zero = Date.now()
@@ -91,7 +77,6 @@ export default function Graph({getData, params}) {
     function draw() {
       time_out_id = setTimeout(function() {
         const data = getData() // get the latest copy!
-        setData(data)
         var [second_last, slice_last] = [second_now, slice_now]
         const t_now = Date.now()
         second_now = seconds(t_now)
@@ -122,17 +107,17 @@ export default function Graph({getData, params}) {
     }
   }
 
-
   return <div className="" >
-    <pre>{cursor}</pre>
+    { params.debug && <pre><h1>size</h1>{JSON.stringify(size, null, 2)}</pre> }
+
     <canvas
        id="canvas"
        width={size.width}
        height={size.height}
-       style={{height:"500px", width:"100%", backgroundColor: 'black'}}>
+       style={{
+         //height:"800px",
+         width:"100%", backgroundColor: 'black'}}>
     </canvas>
-    <pre>
-    {JSON.stringify(summarise_data(data), null, 2)}
-    </pre>
+    { params.debug && <pre><h1>cursor</h1>{cursor}</pre> }
     </div>
 }

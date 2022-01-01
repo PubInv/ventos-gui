@@ -39,7 +39,7 @@ function reducer(state, action) {
   switch (action.type) {
     case 'patch':
       const newstate = { ...state, ...action.value}
-      console.log('newstate', JSON.stringify(newstate, null, 2))
+      // console.log('newstate', JSON.stringify(newstate, null, 2))
       return newstate;
     default:
       throw new Error();
@@ -49,10 +49,12 @@ function reducer(state, action) {
 // core react component
 function App() {
 
+  const debug = false
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [uiMode, setUIMode] = useState('server_config');
   const [observations, setObservations] = useState(baseline_observations);
-  const [debug, setDebug] = useState('');
+  const [debugObj, setDebug] = useState('');
 
   // fixme needs to capture some kind of promise
   function newSetting(field, value) {
@@ -60,17 +62,15 @@ function App() {
     alert(field, value)
   }
 
-  console.log('restarting app: state', JSON.stringify(state, null, 2))
+  // console.log('restarting app: state', JSON.stringify(state, null, 2))
 
   useEffect(() => {
     // this is currently unused
     function newData(new_data) {
-      console.log('new data', new_data)
+      // console.log('new data', new_data)
       const new_observations = []
       const summary = new_data.summary
-      console.log('xx new_data.summary', new_data.summary)
       observations.forEach((observation) => {
-        console.log('xx observation', observation)
         if (summary[observation.name]) {
           new_observations.push({
             ...observation, value: Math.round(summary[observation.name])})
@@ -79,7 +79,6 @@ function App() {
           new_observations.push(observation)
         }
       })
-      console.log('xx new_observations', new_observations)
       setObservations(new_observations)
       setDebug(d => new_data.summary)
     }
@@ -87,7 +86,6 @@ function App() {
     // start server
     const settings = server.default_ventilator_session
     settings.callback = newData
-    console.log('settings', settings)
     server.start(settings)
     // return function to shut down the server for clean exit
     return () => server.halt();
@@ -119,8 +117,8 @@ function App() {
         </div>
       ) : (<></>)}
       <div className='col'>
-        <Graph getData={server.getData} params={{}}/>
-    <pre> {JSON.stringify(debug, null, 2)}</pre>
+        <Graph getData={server.getData} params={{debug}}/>
+        { debug && <pre> {JSON.stringify(debugObj, null, 2)}</pre> }
       </div>
         <div className='col-2 bg-dark text-success'>
           {observations.map((o) => <div key={o.name}>
